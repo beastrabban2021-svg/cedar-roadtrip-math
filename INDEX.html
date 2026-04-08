@@ -1,0 +1,1963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>California Road Trip Math Project — Cedar Middle School</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sun: #F5A623;
+  --ocean: #0077B6;
+  --sky: #90E0EF;
+  --sand: #FFF8EE;
+  --redwood: #C0392B;
+  --avocado: #27AE60;
+  --dusk: #1a1a2e;
+  --slate: #4a5568;
+  --light: #f7f9fc;
+  --white: #ffffff;
+  --shadow: 0 4px 24px rgba(0,119,182,0.10);
+  --shadow-lg: 0 8px 40px rgba(0,119,182,0.16);
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--light);
+  color: var(--dusk);
+  min-height: 100vh;
+}
+
+/* ── HERO LOGIN ─────────────────────────────────────── */
+#loginScreen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, #0077B6 0%, #023e8a 40%, #1a1a2e 100%);
+  position: relative;
+  overflow: hidden;
+  padding: 40px 20px;
+}
+
+#loginScreen::before {
+  content: '';
+  position: absolute;
+  width: 700px; height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(245,166,35,0.18) 0%, transparent 70%);
+  top: -200px; right: -200px;
+  pointer-events: none;
+}
+
+#loginScreen::after {
+  content: '';
+  position: absolute;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(144,224,239,0.12) 0%, transparent 70%);
+  bottom: -150px; left: -150px;
+  pointer-events: none;
+}
+
+.login-card {
+  background: rgba(255,255,255,0.07);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 28px;
+  padding: 52px 48px;
+  text-align: center;
+  max-width: 480px;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  animation: slideUp 0.6s ease both;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.login-emoji { font-size: 64px; display: block; margin-bottom: 16px; animation: bounce 2s ease infinite; }
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.login-card h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  color: #fff;
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.login-card .subtitle {
+  color: rgba(255,255,255,0.65);
+  font-size: 0.95rem;
+  margin-bottom: 32px;
+  font-weight: 500;
+}
+
+.standards-badge {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 36px;
+}
+
+.std-chip {
+  background: rgba(245,166,35,0.2);
+  border: 1px solid rgba(245,166,35,0.4);
+  color: #F5A623;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.3px;
+}
+
+.login-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 15px 24px;
+  border-radius: 14px;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s;
+  margin-bottom: 12px;
+}
+
+.btn-google {
+  background: #fff;
+  color: #333;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+}
+
+.btn-google:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+
+.btn-demo {
+  background: linear-gradient(135deg, var(--sun), #e67e22);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(245,166,35,0.35);
+}
+
+.btn-demo:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(245,166,35,0.45); }
+
+.login-note {
+  color: rgba(255,255,255,0.35);
+  font-size: 11px;
+  margin-top: 20px;
+}
+
+/* ── FLOATING ROAD GRAPHICS ─────────────────────────── */
+.road-graphic {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 80px;
+  background: linear-gradient(#2d2d2d, #1a1a1a);
+  overflow: hidden;
+}
+.road-line {
+  position: absolute;
+  top: 50%; left: 0; right: 0;
+  height: 3px;
+  background: repeating-linear-gradient(90deg, #F5A623 0px, #F5A623 30px, transparent 30px, transparent 60px);
+  transform: translateY(-50%);
+  animation: roadMove 1.5s linear infinite;
+}
+@keyframes roadMove { from { transform: translateY(-50%) translateX(0); } to { transform: translateY(-50%) translateX(-60px); } }
+
+/* ── MAIN APP ────────────────────────────────────────── */
+#appScreen { display: none; }
+
+/* ── TOP BAR ────────────────────────────────────────── */
+.topbar {
+  background: linear-gradient(135deg, var(--ocean) 0%, #023e8a 100%);
+  color: #fff;
+  padding: 0 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 20px rgba(0,119,182,0.3);
+}
+
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.topbar-brand .logo { font-size: 26px; }
+
+.topbar-brand h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.1;
+}
+
+.topbar-brand p {
+  font-size: 11px;
+  opacity: 0.65;
+  font-weight: 500;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* ── BUDGET TICKER ──────────────────────────────────── */
+.budget-ticker {
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 50px;
+  padding: 6px 18px;
+  display: flex;
+  gap: 24px;
+  font-size: 12px;
+}
+
+.ticker-item { text-align: center; }
+.ticker-item .lbl { opacity: 0.6; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; display: block; }
+.ticker-item .val { font-weight: 800; font-size: 14px; display: block; }
+.ticker-item .val.spent { color: #ffd166; }
+.ticker-item .val.remaining { color: #06d6a0; }
+.ticker-item .val.status-ok { color: #06d6a0; }
+.ticker-item .val.status-low { color: #ffd166; }
+.ticker-item .val.status-over { color: #ef233c; }
+
+.avatar-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--sun);
+  color: var(--dusk);
+  font-weight: 900;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── NAV TABS ───────────────────────────────────────── */
+.nav-strip {
+  background: #fff;
+  border-bottom: 2px solid #eef2f7;
+  display: flex;
+  overflow-x: auto;
+  padding: 0 20px;
+  gap: 4px;
+  scrollbar-width: none;
+  position: sticky;
+  top: 64px;
+  z-index: 90;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+}
+.nav-strip::-webkit-scrollbar { display: none; }
+
+.nav-btn {
+  padding: 14px 18px;
+  border: none;
+  background: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #94a3b8;
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-btn:hover { color: var(--ocean); }
+.nav-btn.active { color: var(--ocean); border-bottom-color: var(--ocean); }
+
+.nav-badge {
+  background: var(--sun);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+
+/* ── CONTENT AREA ───────────────────────────────────── */
+.content { padding: 32px 28px; max-width: 1200px; margin: 0 auto; }
+
+.tab-panel { display: none; animation: fadeIn 0.3s ease; }
+.tab-panel.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── STANDARD TAG ───────────────────────────────────── */
+.standard-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+  border: 1px solid #7dd3fc;
+  color: #0369a1;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin: 2px;
+}
+
+.standards-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+/* ── SECTION HEADER ─────────────────────────────────── */
+.section-header {
+  margin-bottom: 24px;
+}
+
+.section-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.7rem;
+  color: var(--dusk);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-header p {
+  color: var(--slate);
+  font-size: 14px;
+  max-width: 680px;
+}
+
+/* ── CARDS ──────────────────────────────────────────── */
+.card {
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 28px;
+  box-shadow: var(--shadow);
+  border: 1px solid #eef2f7;
+  margin-bottom: 24px;
+}
+
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 12px;
+}
+
+.card-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--dusk);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.icon-blue { background: #dbeafe; }
+.icon-gold { background: #fef3c7; }
+.icon-green { background: #d1fae5; }
+.icon-red { background: #fee2e2; }
+.icon-purple { background: #ede9fe; }
+.icon-ocean { background: #e0f2fe; }
+
+/* ── BUDGET HERO ────────────────────────────────────── */
+.budget-hero {
+  background: linear-gradient(135deg, #F5A623 0%, #e67e22 100%);
+  border-radius: var(--radius);
+  padding: 36px 40px;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+}
+
+.budget-hero::before {
+  content: '🌴';
+  position: absolute;
+  font-size: 120px;
+  opacity: 0.07;
+  top: -20px; right: -10px;
+  transform: rotate(15deg);
+}
+
+.budget-hero::after {
+  content: '🌊';
+  position: absolute;
+  font-size: 80px;
+  opacity: 0.07;
+  bottom: -10px; left: 10px;
+}
+
+.budget-hero .label {
+  font-size: 13px;
+  opacity: 0.85;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.budget-hero .amount {
+  font-family: 'Playfair Display', serif;
+  font-size: 5rem;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 12px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.budget-slider-wrap { padding: 0 20px; }
+
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.3);
+  outline: none;
+  cursor: pointer;
+  margin: 16px 0 8px;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+  cursor: pointer;
+  border: 3px solid #e67e22;
+}
+input[type=range]::-webkit-slider-runnable-track { border-radius: 4px; }
+
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  opacity: 0.8;
+  font-weight: 600;
+}
+
+/* ── DATA TABLE ─────────────────────────────────────── */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.data-table th {
+  background: var(--ocean);
+  color: #fff;
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.data-table th:first-child { border-radius: 10px 0 0 0; }
+.data-table th:last-child { border-radius: 0 10px 0 0; }
+
+.data-table td {
+  padding: 11px 16px;
+  border-bottom: 1px solid #f0f4f8;
+}
+
+.data-table tbody tr:hover { background: #f8fbff; }
+.data-table tbody tr:last-child td { border-bottom: none; }
+
+.data-table tfoot td {
+  padding: 13px 16px;
+  font-weight: 800;
+}
+
+.tfoot-sub { background: #f8fbff; color: var(--slate); }
+.tfoot-main { background: var(--ocean); color: #fff; }
+.tfoot-total { background: var(--dusk); color: #fff; font-size: 1.05em; }
+.tfoot-gold { background: var(--sun); color: #fff; }
+.tfoot-green { background: var(--avocado); color: #fff; }
+.tfoot-purple { background: #7c3aed; color: #fff; }
+
+/* ── INPUTS ─────────────────────────────────────────── */
+.inp {
+  width: 100%;
+  padding: 9px 13px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  background: #fafbfd;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.inp:focus {
+  outline: none;
+  border-color: var(--ocean);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(0,119,182,0.1);
+}
+.inp[readonly] { background: #f1f5f9; cursor: not-allowed; color: var(--slate); }
+
+select.inp { cursor: pointer; }
+textarea.inp { resize: vertical; }
+
+/* ── BUTTONS ─────────────────────────────────────────── */
+.btn {
+  padding: 11px 22px;
+  border-radius: 10px;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.btn-primary { background: var(--ocean); color: #fff; }
+.btn-primary:hover { background: #005f99; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,119,182,0.3); }
+.btn-success { background: var(--avocado); color: #fff; }
+.btn-success:hover { background: #219150; }
+.btn-danger { background: var(--redwood); color: #fff; padding: 8px 16px; font-size: 12px; }
+.btn-danger:hover { background: #a93226; }
+.btn-gold { background: var(--sun); color: #fff; }
+.btn-gold:hover { background: #e67e22; }
+.btn-outline { background: transparent; color: var(--ocean); border: 2px solid var(--ocean); }
+.btn-outline:hover { background: var(--ocean); color: #fff; }
+.btn-block { width: 100%; justify-content: center; padding: 16px; font-size: 15px; }
+
+/* ── ALERTS ─────────────────────────────────────────── */
+.alert {
+  padding: 13px 18px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.alert-info    { background: #e0f2fe; color: #0369a1; border-left: 4px solid #0369a1; }
+.alert-success { background: #d1fae5; color: #065f46; border-left: 4px solid #059669; }
+.alert-warn    { background: #fef3c7; color: #92400e; border-left: 4px solid #f59e0b; }
+.alert-danger  { background: #fee2e2; color: #991b1b; border-left: 4px solid #dc2626; }
+
+/* ── MATH CALLOUT ────────────────────────────────────── */
+.math-callout {
+  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+  border: 2px dashed #7dd3fc;
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-top: 16px;
+}
+.math-callout h4 {
+  color: #0369a1;
+  font-size: 13px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.proportion {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--dusk);
+  background: #fff;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 1px solid #bae6fd;
+  margin: 8px 0;
+}
+
+.frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.3;
+}
+.frac-top { border-bottom: 2.5px solid currentColor; padding: 0 6px 3px; }
+.frac-bot { padding: 3px 6px 0; }
+
+/* ── GRID ───────────────────────────────────────────── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.grid-auto { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+.grid-cars { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+
+/* ── CAR CARDS ──────────────────────────────────────── */
+.car-card {
+  background: #fff;
+  border: 2.5px solid #e2e8f0;
+  border-radius: var(--radius);
+  padding: 22px 18px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s;
+  position: relative;
+}
+.car-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: #90cdf4; }
+.car-card.selected { border-color: var(--avocado); background: #f0fdf4; box-shadow: 0 0 0 4px rgba(39,174,96,0.15); }
+.car-card .car-emoji { font-size: 56px; display: block; margin-bottom: 10px; }
+.car-card h4 { font-size: 13px; font-weight: 800; color: var(--dusk); margin-bottom: 14px; }
+.car-stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.car-stat { background: #f8fafc; border-radius: 8px; padding: 8px 4px; }
+.car-stat .s-val { font-size: 1.1em; font-weight: 800; color: var(--ocean); display: block; }
+.car-stat .s-lbl { font-size: 10px; color: #94a3b8; font-weight: 600; display: block; margin-top: 1px; }
+.car-selected-badge {
+  position: absolute;
+  top: -10px; right: -10px;
+  background: var(--avocado);
+  color: #fff;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  box-shadow: 0 2px 8px rgba(39,174,96,0.4);
+}
+.car-card.selected .car-selected-badge { display: flex; }
+
+/* ── ATTRACTION CARDS ───────────────────────────────── */
+.att-card {
+  background: #fff;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+.att-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.att-card.selected { border-color: var(--avocado); }
+.att-header { padding: 12px 14px; color: #fff; }
+.att-header.north { background: linear-gradient(135deg, var(--ocean), #023e8a); }
+.att-header.south { background: linear-gradient(135deg, #e67e22, var(--redwood)); }
+.att-header h5 { font-size: 13px; font-weight: 700; }
+.att-header .city { font-size: 11px; opacity: 0.8; margin-top: 2px; }
+.att-body { padding: 10px 14px; display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.att-body input[type=checkbox] { width: 17px; height: 17px; accent-color: var(--avocado); cursor: pointer; flex-shrink: 0; }
+
+/* ── DASHBOARD CARDS ─────────────────────────────────── */
+.dash-card {
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow);
+  border-top: 4px solid var(--ocean);
+}
+.dash-card.d-gold { border-top-color: var(--sun); }
+.dash-card.d-green { border-top-color: var(--avocado); }
+.dash-card.d-red { border-top-color: var(--redwood); }
+.dash-card.d-purple { border-top-color: #7c3aed; }
+.dash-card.d-sky { border-top-color: #0ea5e9; }
+
+.dash-lbl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #94a3b8; margin-bottom: 8px; }
+.dash-val { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; color: var(--dusk); line-height: 1; }
+.dash-sub { font-size: 12px; color: #94a3b8; margin-top: 6px; font-weight: 600; }
+
+/* ── PROGRESS BAR ────────────────────────────────────── */
+.progress-wrap { background: #f0f4f8; border-radius: 50px; height: 28px; overflow: hidden; margin-top: 10px; }
+.progress-fill {
+  height: 100%;
+  border-radius: 50px;
+  background: linear-gradient(90deg, var(--avocado), #0ea5e9);
+  transition: width 0.6s ease;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 10px;
+  min-width: 40px;
+}
+.progress-fill span { font-size: 12px; font-weight: 800; color: #fff; }
+.progress-fill.warn { background: linear-gradient(90deg, var(--sun), #e67e22); }
+.progress-fill.danger { background: linear-gradient(90deg, #e67e22, var(--redwood)); }
+
+/* ── INPUT GRID ─────────────────────────────────────── */
+.form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 14px; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group label { font-size: 12px; font-weight: 700; color: var(--slate); }
+
+/* ── REFLECTION ─────────────────────────────────────── */
+.reflect-concept {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 14px;
+  border-left: 4px solid var(--ocean);
+}
+.reflect-concept h5 {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--ocean);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── FOOTER ─────────────────────────────────────────── */
+.footer {
+  text-align: center;
+  padding: 32px 20px;
+  color: #94a3b8;
+  font-size: 12px;
+  border-top: 1px solid #eef2f7;
+  margin-top: 20px;
+}
+
+/* ── RESPONSIVE ─────────────────────────────────────── */
+@media (max-width: 768px) {
+  .content { padding: 20px 16px; }
+  .budget-hero .amount { font-size: 3.5rem; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .topbar { padding: 0 16px; }
+  .budget-ticker { display: none; }
+  .login-card { padding: 36px 24px; }
+  .login-card h1 { font-size: 1.7rem; }
+  .card { padding: 20px; }
+}
+
+@media print {
+  .topbar, .nav-strip, .budget-ticker, .btn, #loginScreen { display: none !important; }
+  .tab-panel { display: block !important; page-break-after: always; }
+  #appScreen { display: block !important; }
+}
+
+/* ── MISC ────────────────────────────────────────────── */
+.divider { height: 1px; background: #eef2f7; margin: 20px 0; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.mt-4 { margin-top: 16px; }
+.mt-6 { margin-top: 24px; }
+.mb-4 { margin-bottom: 16px; }
+.gap-row { display: flex; gap: 12px; flex-wrap: wrap; }
+.highlight { color: var(--ocean); font-weight: 800; }
+.tag { display: inline-block; background: #e0f2fe; color: #0369a1; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px; }
+.pill-green { background: #d1fae5; color: #065f46; }
+.pill-gold { background: #fef3c7; color: #92400e; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ LOGIN SCREEN ═══════════ -->
+<div id="loginScreen">
+  <div class="road-graphic"><div class="road-line"></div></div>
+
+  <div class="login-card">
+    <span class="login-emoji">🚗</span>
+    <h1>California Road Trip<br>Math Project</h1>
+    <p class="subtitle">Cedar Middle School · 2025–2026</p>
+
+    <div class="standards-badge">
+      <span class="std-chip">7.RP.A.1</span>
+      <span class="std-chip">7.RP.A.2</span>
+      <span class="std-chip">7.RP.A.3</span>
+      <span class="std-chip">7.NS</span>
+      <span class="std-chip">7.EE.B.3</span>
+      <span class="std-chip">7.SP</span>
+    </div>
+
+    <button class="login-btn btn-google" onclick="loginAs('google')">
+      <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Sign in with Google
+    </button>
+    <button class="login-btn btn-demo" onclick="loginAs('demo')" id="demoLoginBtn">
+      🚀 Start as Guest (Demo Mode)
+    </button>
+    <p class="login-note">Google sign-in is simulated for classroom demo purposes.</p>
+  </div>
+</div>
+
+<!-- ═══════════ MAIN APP ═══════════ -->
+<div id="appScreen">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-brand">
+      <span class="logo">🚗</span>
+      <div>
+        <h1>California Road Trip</h1>
+        <p>Cedar Middle School Math Project</p>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="budget-ticker">
+        <div class="ticker-item">
+          <span class="lbl">Budget</span>
+          <span class="val" id="hdrBudget">$2,500</span>
+        </div>
+        <div class="ticker-item">
+          <span class="lbl">Spent</span>
+          <span class="val spent" id="hdrSpent">$0</span>
+        </div>
+        <div class="ticker-item">
+          <span class="lbl">Left</span>
+          <span class="val remaining" id="hdrLeft">$2,500</span>
+        </div>
+        <div class="ticker-item">
+          <span class="lbl">Status</span>
+          <span class="val status-ok" id="hdrStatus">On Track ✓</span>
+        </div>
+      </div>
+      <button class="avatar-btn" id="avatarBtn" title="Logout" onclick="logout()">G</button>
+    </div>
+  </header>
+
+  <!-- NAV TABS -->
+  <nav class="nav-strip">
+    <button class="nav-btn active" onclick="showTab('budget', this)">💰 Budget</button>
+    <button class="nav-btn" onclick="showTab('locations', this)">📍 Locations</button>
+    <button class="nav-btn" onclick="showTab('car', this)">🚙 Car &amp; Gas</button>
+    <button class="nav-btn" onclick="showTab('attractions', this)">🎢 Attractions</button>
+    <button class="nav-btn" onclick="showTab('lodging', this)">🏨 Lodging</button>
+    <button class="nav-btn" onclick="showTab('food', this)">🍔 Food</button>
+    <button class="nav-btn" onclick="showTab('summary', this)">📊 Summary</button>
+    <button class="nav-btn" onclick="showTab('reflection', this)">📝 Reflection</button>
+  </nav>
+
+  <main class="content">
+
+    <!-- ══ TAB: BUDGET ══════════════════════════════════ -->
+    <div class="tab-panel active" id="tab-budget">
+      <div class="section-header">
+        <h2>💰 Set Your Budget</h2>
+        <p>Choose how much money you have for your California Road Trip. This is your starting total — every expense will come out of this amount.</p>
+        <div class="standards-row">
+          <span class="standard-tag">📐 7.EE.B.3 — Real-world budgeting</span>
+          <span class="standard-tag">📐 7.RP.A.3 — Percent of budget</span>
+        </div>
+      </div>
+
+      <div class="budget-hero">
+        <div class="label">Your Road Trip Budget</div>
+        <div class="amount" id="budgetDisplay">$2,500</div>
+        <div class="budget-slider-wrap">
+          <input type="range" id="budgetSlider" min="1500" max="3000" step="100" value="2500" oninput="updateBudget(this.value)">
+          <div class="slider-labels"><span>$1,500</span><span>$2,000</span><span>$2,500</span><span>$3,000</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-icon icon-gold">🎒</div>
+            Road Trip Essentials
+          </div>
+          <span class="tag pill-gold">$100 limit · Select ≥5 items</span>
+        </div>
+
+        <div class="standards-row">
+          <span class="standard-tag">📐 7.NS — Decimal operations</span>
+          <span class="standard-tag">📐 7.RP.A.3 — Sales tax (8.25%)</span>
+        </div>
+
+        <div id="essAlertBox"></div>
+
+        <div style="overflow-x:auto;">
+          <table class="data-table" id="essTable">
+            <thead>
+              <tr><th>Item</th><th>Price ($)</th><th>✓ Include</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input class="inp" type="text" value="Water Bottles (Pack)"></td>
+                <td><input class="inp ess-price" type="number" value="15.00" step="0.01" oninput="calcEssentials()"></td>
+                <td><input type="checkbox" class="ess-chk" checked onchange="calcEssentials()" style="width:18px;height:18px;accent-color:var(--avocado);cursor:pointer;"></td>
+              </tr>
+              <tr>
+                <td><input class="inp" type="text" value="First Aid Kit"></td>
+                <td><input class="inp ess-price" type="number" value="25.00" step="0.01" oninput="calcEssentials()"></td>
+                <td><input type="checkbox" class="ess-chk" checked onchange="calcEssentials()" style="width:18px;height:18px;accent-color:var(--avocado);cursor:pointer;"></td>
+              </tr>
+              <tr>
+                <td><input class="inp" type="text" value="Car Phone Charger"></td>
+                <td><input class="inp ess-price" type="number" value="20.00" step="0.01" oninput="calcEssentials()"></td>
+                <td><input type="checkbox" class="ess-chk" checked onchange="calcEssentials()" style="width:18px;height:18px;accent-color:var(--avocado);cursor:pointer;"></td>
+              </tr>
+              <tr>
+                <td><input class="inp" type="text" value="Sunglasses"></td>
+                <td><input class="inp ess-price" type="number" value="18.00" step="0.01" oninput="calcEssentials()"></td>
+                <td><input type="checkbox" class="ess-chk" checked onchange="calcEssentials()" style="width:18px;height:18px;accent-color:var(--avocado);cursor:pointer;"></td>
+              </tr>
+              <tr>
+                <td><input class="inp" type="text" value="California Road Atlas"></td>
+                <td><input class="inp ess-price" type="number" value="12.00" step="0.01" oninput="calcEssentials()"></td>
+                <td><input type="checkbox" class="ess-chk" checked onchange="calcEssentials()" style="width:18px;height:18px;accent-color:var(--avocado);cursor:pointer;"></td>
+              </tr>
+              <tr>
+                <td><input class="inp" type="text" placeholder="Custom item…"></td>
+                <td><input class="inp ess-price" type="number" value="0" step="0.01" oninput="calcEssentials()"></td>
+                <td><input type="checkbox" class="ess-chk" onchange="calcEssentials()" style="width:18px;height:18px;accent-color:var(--avocado);cursor:pointer;"></td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr class="tfoot-sub"><td colspan="2" class="text-right">Subtotal:</td><td id="essSub">$90.00</td></tr>
+              <tr class="tfoot-sub"><td colspan="2" class="text-right">Sales Tax (8.25%):</td><td id="essTax">$7.43</td></tr>
+              <tr class="tfoot-main"><td colspan="2" class="text-right">Total Cost:</td><td id="essTotal">$97.43</td></tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <div class="math-callout">
+          <h4>🔢 Math Work — Sales Tax (7.RP.A.3)</h4>
+          <p style="font-size:13px;color:var(--slate);">Sales tax formula: <strong>Total = Subtotal × (1 + tax rate)</strong></p>
+          <div class="proportion" style="margin-top:8px;">
+            Subtotal × 1.0825 = Total with Tax
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TAB: LOCATIONS ═══════════════════════════════ -->
+    <div class="tab-panel" id="tab-locations">
+      <div class="section-header">
+        <h2>📍 Choose Your Destinations</h2>
+        <p>Select <strong>exactly 3 cities</strong> to visit. At least <strong>1 must be in Northern California</strong>. Your route starts and ends at Cedar Middle School in Hesperia, CA.</p>
+        <div class="standards-row">
+          <span class="standard-tag">📐 7.RP.A.1 — Unit rates &amp; distance</span>
+          <span class="standard-tag">📐 7.EE.B.3 — Real-world problem solving</span>
+        </div>
+      </div>
+
+      <div id="locAlertBox"></div>
+
+      <div class="card">
+        <div class="card-title mb-4"><div class="card-icon icon-ocean">🌲</div> Northern California</div>
+        <div class="grid-auto" id="northGrid"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title mb-4"><div class="card-icon icon-gold">☀️</div> Southern California</div>
+        <div class="grid-auto" id="southGrid"></div>
+      </div>
+
+      <div class="card" style="background:#fefce8;border:1px solid #fde68a;">
+        <div class="card-title mb-4">🗺️ Your Route Summary</div>
+        <ol id="selectedList" style="margin-left:20px;line-height:2.2;font-size:14px;color:var(--slate);">
+          <li><em>No locations selected yet</em></li>
+        </ol>
+        <div class="divider"></div>
+        <div class="form-row" style="margin-top:12px;">
+          <div class="form-group"><label>Stop 1:</label><input class="inp" id="s1" type="text" readonly placeholder="Select above"></div>
+          <div class="form-group"><label>Stop 2:</label><input class="inp" id="s2" type="text" readonly placeholder="Select above"></div>
+          <div class="form-group"><label>Stop 3:</label><input class="inp" id="s3" type="text" readonly placeholder="Select above"></div>
+        </div>
+        <button class="btn btn-primary" onclick="optimizeRoute()" style="margin-top:8px;">🔀 Optimize Route</button>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><div class="card-icon icon-blue">📏</div> Driving Distances</div>
+        </div>
+        <p style="font-size:13px;color:var(--slate);margin-bottom:16px;">Look up each driving distance (use Google Maps) and enter the miles for each leg of your trip.</p>
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead><tr><th>From</th><th>To</th><th>Miles</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>Cedar Middle School (Hesperia)</td>
+                <td><input class="inp" id="d1to" placeholder="Stop 1" style="width:140px;"></td>
+                <td><input class="inp dist-inp" id="dist1" type="number" placeholder="0" oninput="calcMiles()"></td>
+              </tr>
+              <tr>
+                <td><input class="inp" id="d2from" placeholder="Stop 1" style="width:140px;"></td>
+                <td><input class="inp" id="d2to" placeholder="Stop 2" style="width:140px;"></td>
+                <td><input class="inp dist-inp" id="dist2" type="number" placeholder="0" oninput="calcMiles()"></td>
+              </tr>
+              <tr>
+                <td><input class="inp" id="d3from" placeholder="Stop 2" style="width:140px;"></td>
+                <td><input class="inp" id="d3to" placeholder="Stop 3" style="width:140px;"></td>
+                <td><input class="inp dist-inp" id="dist3" type="number" placeholder="0" oninput="calcMiles()"></td>
+              </tr>
+              <tr>
+                <td><input class="inp" id="d4from" placeholder="Stop 3" style="width:140px;"></td>
+                <td>Cedar Middle School (Hesperia)</td>
+                <td><input class="inp dist-inp" id="dist4" type="number" placeholder="0" oninput="calcMiles()"></td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr class="tfoot-main"><td colspan="2" class="text-right">Total Trip Miles:</td><td id="totalMiles">0 miles</td></tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TAB: CAR & GAS ══════════════════════════════ -->
+    <div class="tab-panel" id="tab-car">
+      <div class="section-header">
+        <h2>🚙 Car &amp; Gas</h2>
+        <p>Choose a rental car and use <strong>proportions (unit rates)</strong> to calculate how many gallons of gas you'll need for each leg of your road trip.</p>
+        <div class="standards-row">
+          <span class="standard-tag">📐 7.RP.A.1 — Unit rate (MPG)</span>
+          <span class="standard-tag">📐 7.RP.A.2 — Proportional relationships</span>
+          <span class="standard-tag">📐 7.NS — Decimal multiplication</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title mb-4"><div class="card-icon icon-blue">🚗</div> Select Your Rental Car</div>
+        <div class="grid-cars" id="carGrid"></div>
+
+        <div class="math-callout" id="carReasonBox" style="display:none;margin-top:20px;">
+          <h4>💬 Why did you choose this car?</h4>
+          <p style="font-size:12px;color:var(--slate);margin-bottom:8px;">Consider: MPG efficiency, daily cost, range. Connect to 7.RP.A.1 unit rates.</p>
+          <textarea class="inp" rows="3" placeholder="Explain your choice using math reasoning — compare MPG rates, daily cost per mile, total cost over 5 days..."></textarea>
+        </div>
+      </div>
+
+      <div class="card" id="gasCard" style="display:none;">
+        <div class="card-header">
+          <div class="card-title"><div class="card-icon icon-green">⛽</div> Gallons of Gas — Proportion Method</div>
+        </div>
+
+        <div class="math-callout">
+          <h4>🔢 Proportion Formula (7.RP.A.2)</h4>
+          <p style="font-size:13px;color:var(--slate);margin-bottom:10px;">Set up a proportion using your car's MPG as a unit rate:</p>
+          <div class="proportion">
+            <div class="frac"><span class="frac-top" id="mpgTop">24 mi</span><span class="frac-bot">1 gal</span></div>
+            <span>=</span>
+            <div class="frac"><span class="frac-top">distance (mi)</span><span class="frac-bot">x gal</span></div>
+            <span>→</span>
+            <span>x = distance ÷ MPG</span>
+          </div>
+        </div>
+
+        <div style="overflow-x:auto;margin-top:20px;">
+          <table class="data-table">
+            <thead><tr><th>Day</th><th>Route</th><th>Miles</th><th>Proportion</th><th>Gallons</th></tr></thead>
+            <tbody id="gasRows"></tbody>
+          </table>
+        </div>
+
+        <div class="card mt-4" style="background:#f0fdf4;border:1px solid #a7f3d0;">
+          <div class="card-title mb-4">💵 Gas Cost Calculation</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Gas Price per Gallon ($)</label>
+              <input class="inp" id="gasPriceInp" type="number" value="4.35" step="0.01" oninput="calcGasCost()">
+            </div>
+            <div class="form-group">
+              <label>Total Gallons Needed</label>
+              <input class="inp" id="totalGallons" type="number" readonly>
+            </div>
+            <div class="form-group">
+              <label>Total Gas Cost</label>
+              <input class="inp" id="totalGasCost" type="text" readonly style="font-weight:800;color:var(--avocado);">
+            </div>
+          </div>
+        </div>
+
+        <div class="card mt-4" style="background:#fefce8;border:1px solid #fde68a;">
+          <div class="card-title mb-4">🏁 Total Driving Cost</div>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <tbody>
+                <tr><td>Gas Cost</td><td id="drGasCost" class="text-right">$0.00</td></tr>
+                <tr><td>Car Rental (5 days × <span id="drDailyRate">$0</span>/day)</td><td id="drRental" class="text-right">$0.00</td></tr>
+              </tbody>
+              <tfoot>
+                <tr class="tfoot-gold"><td><strong>TOTAL DRIVING COST</strong></td><td id="drTotal" class="text-right"><strong>$0.00</strong></td></tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TAB: ATTRACTIONS ════════════════════════════ -->
+    <div class="tab-panel" id="tab-attractions">
+      <div class="section-header">
+        <h2>🎢 Attractions</h2>
+        <p>Calculate the cost to visit each attraction. Parking is <strong>$20 per location</strong>. Look up real ticket prices online!</p>
+        <div class="standards-row">
+          <span class="standard-tag">📐 7.NS — Decimal addition</span>
+          <span class="standard-tag">📐 7.EE.B.3 — Multi-step problems</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead>
+              <tr><th>City</th><th>Attraction Name</th><th>Ticket/Entrance ($)</th><th>Parking ($)</th><th>Total ($)</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input class="inp" id="ac1" placeholder="City"></td>
+                <td><input class="inp" id="an1" placeholder="Attraction name"></td>
+                <td><input class="inp" id="at1" type="number" value="0" oninput="calcAttractions()"></td>
+                <td><input class="inp" value="20" readonly></td>
+                <td id="aTotal1" style="font-weight:700;">$20</td>
+              </tr>
+              <tr>
+                <td><input class="inp" id="ac2" placeholder="City"></td>
+                <td><input class="inp" id="an2" placeholder="Attraction name"></td>
+                <td><input class="inp" id="at2" type="number" value="0" oninput="calcAttractions()"></td>
+                <td><input class="inp" value="20" readonly></td>
+                <td id="aTotal2" style="font-weight:700;">$20</td>
+              </tr>
+              <tr>
+                <td><input class="inp" id="ac3" placeholder="City"></td>
+                <td><input class="inp" id="an3" placeholder="Attraction name"></td>
+                <td><input class="inp" id="at3" type="number" value="0" oninput="calcAttractions()"></td>
+                <td><input class="inp" value="20" readonly></td>
+                <td id="aTotal3" style="font-weight:700;">$20</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr class="tfoot-purple"><td colspan="4" class="text-right">Total Attractions Cost:</td><td id="attTotal"><strong>$60</strong></td></tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TAB: LODGING ════════════════════════════════ -->
+    <div class="tab-panel" id="tab-lodging">
+      <div class="section-header">
+        <h2>🏨 Lodging</h2>
+        <p>Find a place to stay for <strong>3 nights</strong> (you drive home on Day 5). Research real hotel prices at your selected cities!</p>
+        <div class="standards-row">
+          <span class="standard-tag">📐 7.NS — Decimal multiplication</span>
+          <span class="standard-tag">📐 7.EE.B.3 — Real-world expenses</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead>
+              <tr><th>City</th><th>Hotel / Campground</th><th>Stars</th><th>Cost Per Night ($)</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input class="inp" id="lc1" placeholder="e.g., San Francisco"></td>
+                <td><input class="inp" id="ln1" placeholder="e.g., Holiday Inn"></td>
+                <td>
+                  <select class="inp" id="lr1" style="width:120px;">
+                    <option value="5">⭐⭐⭐⭐⭐</option>
+                    <option value="4">⭐⭐⭐⭐</option>
+                    <option value="3" selected>⭐⭐⭐</option>
+                    <option value="2">⭐⭐</option>
+                    <option value="1">⭐</option>
+                  </select>
+                </td>
+                <td><input class="inp" id="lodCost1" type="number" value="0" oninput="calcLodging()"></td>
+              </tr>
+              <tr>
+                <td><input class="inp" id="lc2" placeholder="e.g., Monterey"></td>
+                <td><input class="inp" id="ln2" placeholder="e.g., Best Western"></td>
+                <td>
+                  <select class="inp" id="lr2" style="width:120px;">
+                    <option value="5">⭐⭐⭐⭐⭐</option>
+                    <option value="4">⭐⭐⭐⭐</option>
+                    <option value="3" selected>⭐⭐⭐</option>
+                    <option value="2">⭐⭐</option>
+                    <option value="1">⭐</option>
+                  </select>
+                </td>
+                <td><input class="inp" id="lodCost2" type="number" value="0" oninput="calcLodging()"></td>
+              </tr>
+              <tr>
+                <td><input class="inp" id="lc3" placeholder="e.g., Santa Barbara"></td>
+                <td><input class="inp" id="ln3" placeholder="e.g., Motel 6"></td>
+                <td>
+                  <select class="inp" id="lr3" style="width:120px;">
+                    <option value="5">⭐⭐⭐⭐⭐</option>
+                    <option value="4">⭐⭐⭐⭐</option>
+                    <option value="3" selected>⭐⭐⭐</option>
+                    <option value="2">⭐⭐</option>
+                    <option value="1">⭐</option>
+                  </select>
+                </td>
+                <td><input class="inp" id="lodCost3" type="number" value="0" oninput="calcLodging()"></td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr class="tfoot-main"><td colspan="3" class="text-right">Total Lodging (3 nights):</td><td id="lodTotal">$0</td></tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TAB: FOOD ═══════════════════════════════════ -->
+    <div class="tab-panel" id="tab-food">
+      <div class="section-header">
+        <h2>🍔 Food Budget</h2>
+        <p>Calculate the cost of meals at each city, including <strong>sales tax</strong> and <strong>tip</strong>. Each location has a different tax rate and tip.</p>
+        <div class="standards-row">
+          <span class="standard-tag">📐 7.RP.A.3 — Tax &amp; tip percentages</span>
+          <span class="standard-tag">📐 7.NS — Decimal operations</span>
+          <span class="standard-tag">📐 7.EE.B.3 — Multi-step problems</span>
+        </div>
+      </div>
+
+      <div id="foodTablesWrap"></div>
+
+      <div class="card" style="background:#fefce8;border:1px solid #fde68a;">
+        <div class="card-title mb-4">🧾 Total Food Cost</div>
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <tbody>
+              <tr><td>Location 1 Total:</td><td id="fT1" class="text-right" style="font-weight:700;">$0.00</td></tr>
+              <tr><td>Location 2 Total:</td><td id="fT2" class="text-right" style="font-weight:700;">$0.00</td></tr>
+              <tr><td>Location 3 Total:</td><td id="fT3" class="text-right" style="font-weight:700;">$0.00</td></tr>
+            </tbody>
+            <tfoot>
+              <tr class="tfoot-total"><td><strong>GRAND FOOD TOTAL</strong></td><td id="fGrand" class="text-right"><strong>$0.00</strong></td></tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TAB: SUMMARY ════════════════════════════════ -->
+    <div class="tab-panel" id="tab-summary">
+      <div class="section-header">
+        <h2>📊 Budget Summary &amp; Analysis</h2>
+        <p>See how all your expenses add up and analyze your spending using percentages and data skills.</p>
+        <div class="standards-row">
+          <span class="standard-tag">📐 7.RP.A.3 — Budget percentages</span>
+          <span class="standard-tag">📐 7.SP — Data analysis</span>
+          <span class="standard-tag">📐 7.EE.B.3 — Financial problem solving</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title mb-4">📈 Budget Utilization</div>
+        <div class="progress-wrap">
+          <div class="progress-fill" id="budgetBar" style="width:0%"><span id="budgetPct">0%</span></div>
+        </div>
+        <p id="budgetMsg" style="font-size:13px;color:var(--slate);margin-top:10px;">Start filling in your expenses to see your budget usage.</p>
+      </div>
+
+      <div id="dashGrid" class="grid-3"></div>
+
+      <div class="card">
+        <div class="card-title mb-4">📋 Complete Budget Breakdown</div>
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <tbody>
+              <tr><td><strong>Starting Budget</strong></td><td id="sb0" class="text-right" style="font-weight:800;color:var(--ocean);">$2,500</td><td class="text-right"></td></tr>
+              <tr><td>Essentials</td><td id="sb1" class="text-right">−$0.00</td><td id="sbp1" class="text-right"><span class="tag">0%</span></td></tr>
+              <tr><td>Attractions</td><td id="sb2" class="text-right">−$0.00</td><td id="sbp2" class="text-right"><span class="tag">0%</span></td></tr>
+              <tr><td>Driving &amp; Car</td><td id="sb3" class="text-right">−$0.00</td><td id="sbp3" class="text-right"><span class="tag">0%</span></td></tr>
+              <tr><td>Lodging</td><td id="sb4" class="text-right">−$0.00</td><td id="sbp4" class="text-right"><span class="tag">0%</span></td></tr>
+              <tr><td>Food</td><td id="sb5" class="text-right">−$0.00</td><td id="sbp5" class="text-right"><span class="tag">0%</span></td></tr>
+            </tbody>
+            <tfoot>
+              <tr class="tfoot-green"><td><strong>MONEY REMAINING</strong></td><td id="sbLeft" class="text-right"><strong>$2,500</strong></td><td id="sbpLeft" class="text-right"></td></tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <div id="summaryAlert" class="mt-4"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title mb-4">🗂️ Standards Alignment</div>
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead><tr><th>Topic in This Project</th><th>Standard</th><th>How You Used It</th></tr></thead>
+            <tbody>
+              <tr><td>Gas gallons / MPG</td><td><span class="tag">7.RP.A.1</span></td><td>Unit rates — miles per gallon</td></tr>
+              <tr><td>Gas proportions</td><td><span class="tag">7.RP.A.2</span></td><td>Setting up &amp; solving proportions</td></tr>
+              <tr><td>Tax, tip, budget %</td><td><span class="tag">7.RP.A.3</span></td><td>Percent of a quantity in context</td></tr>
+              <tr><td>Decimal operations</td><td><span class="tag">7.NS</span></td><td>Adding/multiplying money amounts</td></tr>
+              <tr><td>Budgeting / finance</td><td><span class="tag">7.EE.B.3</span></td><td>Multi-step real-world problems</td></tr>
+              <tr><td>Spending analysis</td><td><span class="tag">7.SP</span></td><td>Interpreting data &amp; distributions</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-block" onclick="window.print()">🖨️ Print / Save My Road Trip Plan</button>
+    </div>
+
+    <!-- ══ TAB: REFLECTION ═════════════════════════════ -->
+    <div class="tab-panel" id="tab-reflection">
+      <div class="section-header">
+        <h2>📝 Project Reflection</h2>
+        <p>Think critically about your math and decision-making. Write thoughtful answers for full credit.</p>
+        <div class="standards-row">
+          <span class="standard-tag">📐 All 7.RP, 7.NS, 7.EE, 7.SP</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title mb-4">Step 1 — Budget Analysis</div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>My original budget was:</label>
+            <input class="inp" id="refBudget" readonly>
+          </div>
+          <div class="form-group">
+            <label>Total amount I spent:</label>
+            <input class="inp" id="refSpent" readonly>
+          </div>
+          <div class="form-group">
+            <label>I was over/under by:</label>
+            <input class="inp" id="refDiff" readonly>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>If over budget — where could you save money?</label>
+          <textarea class="inp" rows="3" placeholder="Think about cheaper lodging options, a more fuel-efficient car, fewer attractions, lower-cost meals..."></textarea>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title mb-4">Step 2 — Math Concept Connections</div>
+        <p style="font-size:13px;color:var(--slate);margin-bottom:16px;">Explain how you used each math concept in the project. Be specific — use numbers from your work!</p>
+
+        <div class="reflect-concept">
+          <h5>📐 7.RP.A.1 &amp; 7.RP.A.2 — Proportions &amp; Unit Rates</h5>
+          <textarea class="inp" rows="3" placeholder="How did you use proportions to calculate gallons of gas? Set up the proportion in your explanation: e.g., 24 miles/1 gallon = 300 miles/x gallons..."></textarea>
+        </div>
+
+        <div class="reflect-concept" style="border-left-color:var(--sun);">
+          <h5 style="color:#b45309;">📐 7.RP.A.3 — Tax, Tip &amp; Budget Percentages</h5>
+          <textarea class="inp" rows="3" placeholder="Give one example of calculating tax or tip. What was the original price? What was the tax rate? What was the final total?"></textarea>
+        </div>
+
+        <div class="reflect-concept" style="border-left-color:var(--avocado);">
+          <h5 style="color:#065f46;">📐 7.NS — Operations with Decimals</h5>
+          <textarea class="inp" rows="3" placeholder="Describe one calculation where you had to carefully add or multiply decimal amounts. Was rounding involved?"></textarea>
+        </div>
+
+        <div class="reflect-concept" style="border-left-color:#7c3aed;">
+          <h5 style="color:#5b21b6;">📐 7.EE.B.3 — Real-World Problem Solving</h5>
+          <textarea class="inp" rows="3" placeholder="How did budgeting feel different from regular math homework? What surprised you about planning a real trip?"></textarea>
+        </div>
+
+        <div class="reflect-concept" style="border-left-color:var(--redwood);">
+          <h5 style="color:#991b1b;">📐 7.SP — Data Analysis</h5>
+          <textarea class="inp" rows="3" placeholder="Look at your spending breakdown percentages. Which category took the biggest percentage? Does this make sense? What does the data tell you?"></textarea>
+        </div>
+      </div>
+
+      <button class="btn btn-success btn-block" onclick="saveReflection()">💾 Save Reflection</button>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    🌴 Cedar Middle School — California Road Trip Math Project 2025–2026 &nbsp;|&nbsp; Standards: 7.RP.A.1 · 7.RP.A.2 · 7.RP.A.3 · 7.NS · 7.EE.B.3 · 7.SP
+  </footer>
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════
+   STATE
+════════════════════════════════════════════════════════ */
+const S = {
+  budget: 2500,
+  ess: { sub: 0, tax: 0, total: 0 },
+  locs: [],
+  car: null,
+  dists: [0,0,0,0],
+  gasCost: 0,
+  driveCost: 0,
+  attCost: 60,
+  lodCost: 0,
+  foodCost: 0,
+  totalSpent: 0
+};
+
+/* ════════════════════════════════════════════════════════
+   DATA
+════════════════════════════════════════════════════════ */
+const CARS = [
+  { name:'Range Rover Sport 2023', mpg:24, daily:138, range:450, icon:'🚙', badge:'Luxury' },
+  { name:'Jeep Wrangler 2023',     mpg:27, daily:189, range:350, icon:'🚗', badge:'Adventure' },
+  { name:'Chevy Camaro V8 2023',  mpg:16, daily:160, range:304, icon:'🏎️', badge:'Sport' },
+  { name:'Rav4 Hybrid 2023',      mpg:41, daily:158, range:580, icon:'🚐', badge:'Eco' }
+];
+
+const NORTH = [
+  {name:'Winchester Mystery House', city:'San Jose'},
+  {name:'Monterey Bay Aquarium',    city:'Monterey'},
+  {name:'The Mystery Spot',         city:'Santa Cruz'},
+  {name:'Muir Woods National Monument', city:'Mill Valley'},
+  {name:'Golden Gate Bridge',       city:'San Francisco'},
+  {name:'Six Flags Discovery Kingdom', city:'Vallejo'},
+  {name:"California's Great America",  city:'Santa Clara'},
+  {name:'Santa Cruz Beach Boardwalk',  city:'Santa Cruz'},
+  {name:'Fort Funston Dog Beach',  city:'San Francisco'},
+  {name:'Oakland Zoo',              city:'Oakland'}
+];
+
+const SOUTH = [
+  {name:'San Diego Zoo',             city:'San Diego'},
+  {name:'Universal Studios',         city:'Universal City'},
+  {name:'Joshua Tree National Park', city:'Joshua Tree'},
+  {name:'Santa Monica Pier',         city:'Santa Monica'},
+  {name:'Catalina Island',           city:'Catalina'},
+  {name:'Medieval Times',            city:'Buena Park'},
+  {name:'Discovery Science Center',  city:'Santa Ana'},
+  {name:'La Jolla Cove',             city:'La Jolla'},
+  {name:'Palm Springs Aerial Tramway', city:'Palm Springs'},
+  {name:'Aquarium of the Pacific',   city:'Long Beach'},
+  {name:'Disneyland',                city:'Anaheim'},
+  {name:'California Adventure',      city:'Anaheim'},
+  {name:'Six Flags Magic Mountain',  city:'Valencia'},
+  {name:'Sea World',                 city:'San Diego'},
+  {name:"Knott's Berry Farm",        city:'Buena Park'},
+  {name:'Legoland',                  city:'Carlsbad'}
+];
+
+const FOOD_CFG = [
+  {tax:8.25, tip:20},
+  {tax:7.25, tip:25},
+  {tax:10.0,  tip:15}
+];
+
+/* ════════════════════════════════════════════════════════
+   LOGIN / LOGOUT
+════════════════════════════════════════════════════════ */
+function loginAs(type) {
+  const name = type === 'google' ? 'Alex Student' : 'Guest Student';
+  const email = type === 'google' ? 'alex.s@cedarmiddle.edu' : 'guest@demo.com';
+  document.getElementById('avatarBtn').textContent = name[0].toUpperCase();
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('appScreen').style.display = 'block';
+  initApp();
+  loadData();
+}
+
+function logout() {
+  if (confirm('Log out? Your progress is saved locally.')) {
+    saveData();
+    location.reload();
+  }
+}
+
+/* ════════════════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════════════════ */
+function initApp() {
+  renderCars();
+  renderAttractions();
+  renderFoodTables();
+  calcEssentials();
+  updateBudget(2500);
+
+  try {
+    if (localStorage.getItem('caRT25')) {
+      document.getElementById('demoLoginBtn').textContent = '▶️ Resume Previous Session';
+    }
+  } catch(e){}
+}
+
+/* ════════════════════════════════════════════════════════
+   TABS
+════════════════════════════════════════════════════════ */
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'summary')    updateSummary();
+  if (id === 'reflection') updateReflection();
+}
+
+/* ════════════════════════════════════════════════════════
+   BUDGET
+════════════════════════════════════════════════════════ */
+function updateBudget(v) {
+  S.budget = parseInt(v);
+  document.getElementById('budgetDisplay').textContent = '$' + S.budget.toLocaleString();
+  document.getElementById('budgetSlider').value = v;
+  document.getElementById('hdrBudget').textContent = '$' + S.budget.toLocaleString();
+  updateHeader();
+  saveData();
+}
+
+/* ════════════════════════════════════════════════════════
+   ESSENTIALS
+════════════════════════════════════════════════════════ */
+function calcEssentials() {
+  const prices = [...document.querySelectorAll('.ess-price')];
+  const checks = [...document.querySelectorAll('.ess-chk')];
+  let sub = 0, cnt = 0;
+  prices.forEach((p, i) => {
+    if (checks[i].checked) { sub += parseFloat(p.value)||0; cnt++; }
+  });
+  const tax = sub * 0.0825;
+  const total = sub + tax;
+  S.ess = {sub, tax, total};
+  document.getElementById('essSub').textContent   = '$' + sub.toFixed(2);
+  document.getElementById('essTax').textContent   = '$' + tax.toFixed(2);
+  document.getElementById('essTotal').textContent = '$' + total.toFixed(2);
+
+  const box = document.getElementById('essAlertBox');
+  if (cnt < 5) {
+    box.innerHTML = `<div class="alert alert-warn">⚠️ Select at least 5 items! (${cnt}/5 selected)</div>`;
+  } else {
+    box.innerHTML = `<div class="alert alert-success">✅ ${cnt} items selected — great packing!</div>`;
+  }
+  updateHeader();
+  saveData();
+}
+
+/* ════════════════════════════════════════════════════════
+   LOCATIONS
+════════════════════════════════════════════════════════ */
+function renderAttractions() {
+  document.getElementById('northGrid').innerHTML = NORTH.map((a,i) => attCard(a,i,'north')).join('');
+  document.getElementById('southGrid').innerHTML = SOUTH.map((a,i) => attCard(a,i,'south')).join('');
+}
+
+function attCard(a, i, region) {
+  return `
+    <div class="att-card" id="attcard-${region}-${i}">
+      <div class="att-header ${region}">
+        <h5>${a.name}</h5>
+        <div class="city">📍 ${a.city}</div>
+      </div>
+      <div class="att-body">
+        <input type="checkbox" id="attchk-${region}-${i}"
+          onchange="toggleLoc('${a.city}','${a.name.replace(/'/g,"\\'")}','${region}',${i})">
+        <label for="attchk-${region}-${i}" style="font-size:13px;font-weight:600;cursor:pointer;">Select this city</label>
+      </div>
+    </div>`;
+}
+
+function toggleLoc(city, name, region, idx) {
+  const cb   = document.getElementById(`attchk-${region}-${idx}`);
+  const card = document.getElementById(`attcard-${region}-${idx}`);
+  const exists = S.locs.some(l => l.city === city && l.name === name);
+
+  if (!exists) {
+    if (S.locs.length >= 3) { alert('Only 3 locations allowed!'); cb.checked = false; return; }
+    S.locs.push({city, name, region});
+    card.classList.add('selected');
+  } else {
+    S.locs = S.locs.filter(l => !(l.city===city && l.name===name));
+    cb.checked = false;
+    card.classList.remove('selected');
+  }
+  updateLocUI();
+  saveData();
+}
+
+function updateLocUI() {
+  const list = document.getElementById('selectedList');
+  if (!S.locs.length) {
+    list.innerHTML = '<li><em>No locations selected yet</em></li>';
+    ['s1','s2','s3'].forEach(id => document.getElementById(id).value = '');
+  } else {
+    list.innerHTML = S.locs.map(l =>
+      `<li><strong>${l.city}</strong> — ${l.name} ${l.region==='north'?'🌲':'☀️'}</li>`
+    ).join('');
+    ['s1','s2','s3'].forEach((id,i) => {
+      document.getElementById(id).value = S.locs[i]?.city || '';
+    });
+    // Auto-fill attraction cities
+    for (let i=1;i<=3;i++) {
+      const el = document.getElementById('ac'+i);
+      if (el && S.locs[i-1]) el.value = S.locs[i-1].city;
+    }
+    // Auto-fill lodging cities
+    for (let i=1;i<=3;i++) {
+      const el = document.getElementById('lc'+i);
+      if (el && S.locs[i-1]) el.value = S.locs[i-1].city;
+    }
+  }
+
+  const hasNorth = S.locs.some(l=>l.region==='north');
+  const box = document.getElementById('locAlertBox');
+  if (S.locs.length===3 && hasNorth) {
+    box.innerHTML = '<div class="alert alert-success">✅ Perfect! 3 locations selected, including at least 1 Northern CA.</div>';
+  } else if (S.locs.length===3 && !hasNorth) {
+    box.innerHTML = '<div class="alert alert-danger">❌ You need at least 1 Northern California location!</div>';
+  } else {
+    box.innerHTML = `<div class="alert alert-warn">⏳ Select ${3-S.locs.length} more location(s). Need at least 1 in Northern CA.</div>`;
+  }
+}
+
+function optimizeRoute() {
+  if (S.locs.length < 3) { alert('Select 3 locations first!'); return; }
+  const sorted = [...S.locs].sort((a,b) => a.region==='north'&&b.region!=='north'?-1:1);
+  document.getElementById('d1to').value   = sorted[0].city;
+  document.getElementById('d2from').value = sorted[0].city;
+  document.getElementById('d2to').value   = sorted[1].city;
+  document.getElementById('d3from').value = sorted[1].city;
+  document.getElementById('d3to').value   = sorted[2].city;
+  document.getElementById('d4from').value = sorted[2].city;
+  alert('Route optimized! North → South loop. Now enter driving distances using Google Maps.');
+}
+
+function calcMiles() {
+  S.dists = [1,2,3,4].map(i => parseFloat(document.getElementById('dist'+i).value)||0);
+  const total = S.dists.reduce((a,b)=>a+b,0);
+  document.getElementById('totalMiles').textContent = total.toLocaleString() + ' miles';
+  if (S.car) renderGasRows();
+  saveData();
+}
+
+/* ════════════════════════════════════════════════════════
+   CARS
+════════════════════════════════════════════════════════ */
+function renderCars() {
+  document.getElementById('carGrid').innerHTML = CARS.map((c,i) => `
+    <div class="car-card" id="car-${i}" onclick="selectCar(${i})">
+      <div class="car-selected-badge">✓</div>
+      <span class="car-emoji">${c.icon}</span>
+      <h4>${c.name}</h4>
+      <span class="tag pill-gold" style="margin-bottom:10px;">${c.badge}</span>
+      <div class="car-stats-row">
+        <div class="car-stat"><span class="s-val">${c.mpg}</span><span class="s-lbl">MPG</span></div>
+        <div class="car-stat"><span class="s-val">$${c.daily}</span><span class="s-lbl">/day</span></div>
+        <div class="car-stat"><span class="s-val">${c.range}</span><span class="s-lbl">mi range</span></div>
+      </div>
+    </div>`).join('');
+}
+
+function selectCar(i) {
+  document.querySelectorAll('.car-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('car-'+i).classList.add('selected');
+  S.car = CARS[i];
+  document.getElementById('carReasonBox').style.display='block';
+  document.getElementById('gasCard').style.display='block';
+  document.getElementById('mpgTop').textContent = S.car.mpg+' mi';
+  document.getElementById('drDailyRate').textContent = '$'+S.car.daily;
+  renderGasRows();
+  saveData();
+}
+
+function renderGasRows() {
+  const routes = [
+    {day:1, from:'Cedar Middle School', to: document.getElementById('d1to').value   || 'Stop 1'},
+    {day:2, from: document.getElementById('d2from').value||'Stop 1', to: document.getElementById('d2to').value||'Stop 2'},
+    {day:3, from: document.getElementById('d3from').value||'Stop 2', to: document.getElementById('d3to').value||'Stop 3'},
+    {day:4, from: document.getElementById('d4from').value||'Stop 3', to:'Cedar Middle School'}
+  ];
+  let totalGal = 0;
+  const tbody = document.getElementById('gasRows');
+  tbody.innerHTML = routes.map((r,i) => {
+    const mi  = S.dists[i]||0;
+    const gal = mi / S.car.mpg;
+    totalGal += gal;
+    return `<tr>
+      <td style="font-weight:700;">Day ${r.day}</td>
+      <td>${r.from} → ${r.to}</td>
+      <td>${mi}</td>
+      <td style="font-family:'Courier New',monospace;font-size:12px;color:var(--ocean);">${S.car.mpg}/1 = ${mi}/x &nbsp;→&nbsp; x = ${gal.toFixed(1)}</td>
+      <td style="font-weight:800;">${gal.toFixed(2)} gal</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('totalGallons').value = totalGal.toFixed(2);
+  calcGasCost(totalGal);
+}
+
+function calcGasCost(gal) {
+  if (gal===undefined) gal = parseFloat(document.getElementById('totalGallons').value)||0;
+  const price = parseFloat(document.getElementById('gasPriceInp').value)||0;
+  const gas   = price * gal;
+  const rental= S.car ? S.car.daily * 5 : 0;
+  S.gasCost   = gas;
+  S.driveCost = gas + rental;
+  document.getElementById('totalGasCost').value = '$'+gas.toFixed(2);
+  document.getElementById('drGasCost').textContent = '$'+gas.toFixed(2);
+  document.getElementById('drRental').textContent  = '$'+rental.toFixed(2);
+  document.getElementById('drTotal').textContent   = '$'+S.driveCost.toFixed(2);
+  updateHeader();
+  saveData();
+}
+
+/* ════════════════════════════════════════════════════════
+   ATTRACTIONS
+════════════════════════════════════════════════════════ */
+function calcAttractions() {
+  let total = 0;
+  for (let i=1;i<=3;i++) {
+    const t = parseFloat(document.getElementById('at'+i).value)||0;
+    const row = t+20;
+    document.getElementById('aTotal'+i).textContent = '$'+row;
+    total += row;
+  }
+  S.attCost = total;
+  document.getElementById('attTotal').innerHTML = '<strong>$'+total+'</strong>';
+  updateHeader();
+  saveData();
+}
+
+/* ════════════════════════════════════════════════════════
+   LODGING
+════════════════════════════════════════════════════════ */
+function calcLodging() {
+  let total = 0;
+  for (let i=1;i<=3;i++) total += parseFloat(document.getElementById('lodCost'+i).value)||0;
+  S.lodCost = total;
+  document.getElementById('lodTotal').textContent = '$'+total;
+  updateHeader();
+  saveData();
+}
+
+/* ════════════════════════════════════════════════════════
+   FOOD
+════════════════════════════════════════════════════════ */
+function renderFoodTables() {
+  const wrap = document.getElementById('foodTablesWrap');
+  wrap.innerHTML = FOOD_CFG.map((cfg,idx) => {
+    const n = idx+1;
+    return `
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-header">
+        <div class="card-title"><div class="card-icon icon-gold">🍽️</div> Location #${n} Food Costs</div>
+        <div>
+          <span class="tag pill-green" style="margin-right:6px;">Tax: ${cfg.tax}%</span>
+          <span class="tag pill-gold">Tip: ${cfg.tip}%</span>
+        </div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>Meal</th><th>Food Price ($)</th><th>Tax ($)</th><th>Tip ($)</th><th>Total ($)</th></tr></thead>
+          <tbody>
+            ${['breakfast','lunch','dinner'].map(meal => `
+            <tr>
+              <td style="font-weight:600;text-transform:capitalize;">${meal}</td>
+              <td><input class="inp" id="fp${n}${meal}" type="number" value="0" step="0.01"
+                  oninput="calcFood(${n},${cfg.tax},${cfg.tip})"></td>
+              <td id="ftax${n}${meal}">$0.00</td>
+              <td id="ftip${n}${meal}">$0.00</td>
+              <td id="ftot${n}${meal}" style="font-weight:700;">$0.00</td>
+            </tr>`).join('')}
+          </tbody>
+          <tfoot>
+            <tr class="tfoot-main"><td colspan="4" class="text-right">Total for Location #${n}:</td><td id="foodSub${n}">$0.00</td></tr>
+          </tfoot>
+        </table>
+      </div>
+      <div class="math-callout" style="margin-top:14px;">
+        <h4>🔢 Tax &amp; Tip Formula (7.RP.A.3)</h4>
+        <div class="proportion">
+          With Tax = Price × ${(1+cfg.tax/100).toFixed(4)} &nbsp;|&nbsp; Tip = (Price + Tax) × ${(cfg.tip/100).toFixed(2)}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function calcFood(locNum, taxRate, tipRate) {
+  const meals = ['breakfast','lunch','dinner'];
+  let locTotal = 0;
+  meals.forEach(meal => {
+    const price = parseFloat(document.getElementById(`fp${locNum}${meal}`).value)||0;
+    const tax   = price * (taxRate/100);
+    const sub   = price + tax;
+    const tip   = sub * (tipRate/100);
+    const total = sub + tip;
+    document.getElementById(`ftax${locNum}${meal}`).textContent = '$'+tax.toFixed(2);
+    document.getElementById(`ftip${locNum}${meal}`).textContent = '$'+tip.toFixed(2);
+    document.getElementById(`ftot${locNum}${meal}`).textContent = '$'+total.toFixed(2);
+    locTotal += total;
+  });
+  document.getElementById('foodSub'+locNum).textContent = '$'+locTotal.toFixed(2);
+  document.getElementById('fT'+locNum).textContent = '$'+locTotal.toFixed(2);
+  S.foodCost = [1,2,3].reduce((a,i) => {
+    const el = document.getElementById('foodSub'+i);
+    return a + (el ? parseFloat(el.textContent.replace('$',''))||0 : 0);
+  }, 0);
+  document.getElementById('fGrand').innerHTML = '<strong>$'+S.foodCost.toFixed(2)+'</strong>';
+  updateHeader();
+  saveData();
+}
+
+/* ════════════════════════════════════════════════════════
+   HEADER STATS
+════════════════════════════════════════════════════════ */
+function updateHeader() {
+  const spent = S.ess.total + S.attCost + S.driveCost + S.lodCost + S.foodCost;
+  S.totalSpent = spent;
+  const left  = S.budget - spent;
+  document.getElementById('hdrSpent').textContent = '$'+spent.toLocaleString();
+  document.getElementById('hdrLeft').textContent  = '$'+left.toLocaleString();
+  const st = document.getElementById('hdrStatus');
+  if (left < 0)   { st.textContent='Over Budget ⚠️'; st.className='val status-over'; }
+  else if (left<500){ st.textContent='Low Budget 🟡'; st.className='val status-low'; }
+  else              { st.textContent='On Track ✓';   st.className='val status-ok'; }
+}
+
+/* ════════════════════════════════════════════════════════
+   SUMMARY
+════════════════════════════════════════════════════════ */
+function updateSummary() {
+  const spent = S.ess.total + S.attCost + S.driveCost + S.lodCost + S.foodCost;
+  const left  = S.budget - spent;
+  const pct   = (spent / S.budget * 100);
+
+  // Progress bar
+  const bar = document.getElementById('budgetBar');
+  bar.style.width = Math.min(pct,100)+'%';
+  bar.className = 'progress-fill' + (pct>100?' danger':pct>80?' warn':'');
+  document.getElementById('budgetPct').textContent = pct.toFixed(1)+'%';
+  document.getElementById('budgetMsg').textContent =
+    pct>100 ? '⚠️ Over budget! Consider cutting some expenses.' :
+    pct>80  ? '⚡ Using most of your budget — watch spending!' :
+    '✅ Well within budget — great planning!';
+
+  // Dashboard cards
+  const cats = [
+    {label:'Essentials', val:S.ess.total, cls:'d-purple'},
+    {label:'Attractions', val:S.attCost,  cls:'d-sky'},
+    {label:'Driving & Car', val:S.driveCost, cls:'d-gold'},
+    {label:'Lodging',    val:S.lodCost,  cls:''},
+    {label:'Food',       val:S.foodCost, cls:'d-green'},
+    {label:'Remaining',  val:left,        cls:'d-red'}
+  ];
+  document.getElementById('dashGrid').innerHTML = cats.map(c => `
+    <div class="dash-card ${c.cls}">
+      <div class="dash-lbl">${c.label}</div>
+      <div class="dash-val" style="${c.label==='Remaining'?`color:${left<0?'var(--redwood)':'var(--avocado)'}`:''}"
+      >$${Math.abs(c.val).toFixed(0)}</div>
+      <div class="dash-sub">${(Math.abs(c.val)/S.budget*100).toFixed(1)}% of budget</div>
+    </div>`).join('');
+
+  // Breakdown table
+  document.getElementById('sb0').textContent = '$'+S.budget.toLocaleString();
+  const rows = [
+    {id:'sb1',v:S.ess.total},{id:'sb2',v:S.attCost},
+    {id:'sb3',v:S.driveCost},{id:'sb4',v:S.lodCost},{id:'sb5',v:S.foodCost}
+  ];
+  rows.forEach((r,i) => {
+    document.getElementById(r.id).textContent = '−$'+r.v.toFixed(2);
+    const pEl = document.getElementById('sbp'+(i+1));
+    pEl.innerHTML = `<span class="tag">${(r.v/S.budget*100).toFixed(1)}%</span>`;
+  });
+  document.getElementById('sbLeft').innerHTML = `<strong>$${left.toFixed(2)}</strong>`;
+  document.getElementById('sbpLeft').innerHTML = `<span class="tag pill-${left<0?'red':'green'}" style="${left<0?'background:#fee2e2;color:#991b1b;':'background:#d1fae5;color:#065f46;'}">${(left/S.budget*100).toFixed(1)}%</span>`;
+
+  // Alert
+  const alertEl = document.getElementById('summaryAlert');
+  if (left < 0) {
+    alertEl.innerHTML = `<div class="alert alert-danger">⚠️ <strong>Over budget by $${Math.abs(left).toFixed(2)}!</strong> Consider a cheaper car, less expensive hotels, or fewer dining options.</div>`;
+  } else if (left < 200) {
+    alertEl.innerHTML = `<div class="alert alert-warn">🟡 <strong>Very tight!</strong> Only $${left.toFixed(2)} remaining — leave room for unexpected expenses.</div>`;
+  } else {
+    alertEl.innerHTML = `<div class="alert alert-success">🎉 <strong>Great job!</strong> You have $${left.toFixed(2)} remaining. Smart planning!</div>`;
+  }
+}
+
+/* ════════════════════════════════════════════════════════
+   REFLECTION
+════════════════════════════════════════════════════════ */
+function updateReflection() {
+  document.getElementById('refBudget').value = '$'+S.budget.toLocaleString();
+  document.getElementById('refSpent').value  = '$'+S.totalSpent.toFixed(2);
+  const diff = S.budget - S.totalSpent;
+  document.getElementById('refDiff').value   = (diff>=0?'Under by $':'Over by $')+Math.abs(diff).toFixed(2);
+}
+
+function saveReflection() {
+  saveData();
+  alert('Reflection saved! ✅');
+}
+
+/* ════════════════════════════════════════════════════════
+   PERSISTENCE
+════════════════════════════════════════════════════════ */
+function saveData() {
+  const inputs = {};
+  document.querySelectorAll('input[id], select[id], textarea[id]').forEach(el => {
+    if (!el.id) return;
+    inputs[el.id] = el.type==='checkbox' ? el.checked : el.value;
+  });
+  try { localStorage.setItem('caRT25', JSON.stringify({S, inputs})); } catch(e){}
+}
+
+function loadData() {
+  let saved;
+  try { saved = localStorage.getItem('caRT25'); } catch(e){ return; }
+  if (!saved) return;
+  try {
+    const d = JSON.parse(saved);
+    if (d.inputs) {
+      Object.entries(d.inputs).forEach(([id, val]) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (el.type==='checkbox') el.checked = val;
+        else el.value = val;
+      });
+    }
+    // Re-run calculations
+    calcEssentials();
+    calcMiles();
+    calcAttractions();
+    calcLodging();
+    FOOD_CFG.forEach((_,i) => calcFood(i+1, FOOD_CFG[i].tax, FOOD_CFG[i].tip));
+    if (S.car) calcGasCost();
+  } catch(e){}
+}
+
+window.addEventListener('beforeunload', saveData);
+
+// Check saved data
+try {
+  if (localStorage.getItem('caRT25')) {
+    document.getElementById('demoLoginBtn').textContent = '▶️ Resume Previous Session';
+  }
+} catch(e){}
+</script>
+</body>
+</html>
